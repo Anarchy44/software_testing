@@ -52,7 +52,7 @@ def main() -> None:
     args = parser.parse_args()
 
     input_path = Path(args.input)
-    out_dir = ROOT / "outputs"
+    out_dir = ROOT / "outputs" / "fluxev"
     fig_dir = out_dir / "figures"
     out_dir.mkdir(parents=True, exist_ok=True)
     fig_dir.mkdir(parents=True, exist_ok=True)

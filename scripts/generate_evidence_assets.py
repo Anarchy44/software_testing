@@ -21,9 +21,16 @@ def run_text(cmd: list[str]) -> str:
 
 def font(size: int, mono: bool = False):
     candidates = [
+        # Windows
         "C:/Windows/Fonts/consola.ttf" if mono else "C:/Windows/Fonts/msyh.ttc",
         "C:/Windows/Fonts/simhei.ttf" if not mono else "C:/Windows/Fonts/consola.ttf",
         "C:/Windows/Fonts/arial.ttf",
+        # macOS
+        "/System/Library/Fonts/Helvetica.ttc",
+        "/System/Library/Fonts/PingFang.ttc",
+        # Linux
+        "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf" if mono else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
     ]
     for path in candidates:
         if Path(path).exists():
@@ -128,7 +135,7 @@ def main() -> None:
         "submission-package\nsource code, experiment data, screenshots, report and PPT are included\n.git, node_modules, local caches and absolute host paths are excluded",
         OUT / "git_status.png",
     )
-    render_terminal_png("experiment summary", (ROOT / "outputs" / "experiment_summary.json").read_text(encoding="utf-8"), OUT / "experiment_summary.png")
+    render_terminal_png("experiment summary", (ROOT / "outputs" / "fluxev" / "experiment_summary.json").read_text(encoding="utf-8"), OUT / "experiment_summary.png")
     render_requirements_map(OUT / "requirements_map.png")
     render_architecture(OUT / "architecture.png")
     print(f"wrote screenshots to {OUT}")

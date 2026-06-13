@@ -110,8 +110,11 @@ class TestHomepage:
         products = driver.find_elements(By.CSS_SELECTOR, ".product, .product-card, [class*='product']")
         assert len(products) > 0, "Homepage should display products"
 
-        # Page has visible content
-        header = driver.find_element(By.TAG_NAME, "header") or driver.find_element(By.TAG_NAME, "body")
+        # Page has visible content (find_element raises if not found)
+        try:
+            header = driver.find_element(By.TAG_NAME, "header")
+        except Exception:
+            header = driver.find_element(By.TAG_NAME, "body")
         assert header.is_displayed(), "Page should have visible content"
 
         print(f"    Homepage loaded in {load_time * 1000:.0f}ms, {len(products)} products found")

@@ -2,8 +2,12 @@
 # deploy_online_boutique.sh - Deploy Online Boutique to minikube (Linux/Mac)
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+cd "$PROJECT_ROOT" || exit 1
+
 REPO_URL="${ONLINE_BOUTIQUE_REPO_URL:-https://github.com/GoogleCloudPlatform/microservices-demo.git}"
-RELEASE_DIR="third_party/microservices-demo"
+RELEASE_DIR="$PROJECT_ROOT/third_party/microservices-demo"
 
 echo "=== Deploying Online Boutique ==="
 

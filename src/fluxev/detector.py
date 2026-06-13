@@ -188,10 +188,17 @@ class FluxEVDetector:
         l = self.l
         for gs, ge in missing_starts:
             # Compute period means around the gap
-            period_start = max(0, gs - l)
-            period_end = min(n, ge + l)
             mu_prev = filled.iloc[max(0, gs - 2 * l):max(0, gs - l)].mean()
-            mu_curr = filled.iloc[gs:ge].mean() if not filled.iloc[gs:ge].isna().all() else 0
+            # Use post-gap mean if within-gap data is all NaN (long gap)
+            within_gap = filled.iloc[gs:ge]
+            if within_gap.isna().all() or within_gap.mean() == 0.0:
+                post_start = min(n, ge + l)
+                post_end = min(n, ge + 2 * l)
+                mu_post = filled.iloc[post_start:post_end].mean() if post_start < n else 0.0
+                mu_curr = mu_post if pd.notna(mu_post) and mu_post != 0.0 else mu_prev
+            else:
+                mu_curr = within_gap.mean()
+
             bias = (mu_curr - mu_prev) / 2.0 if pd.notna(mu_prev) and pd.notna(mu_curr) else 0.0
 
             for i in range(gs, ge):

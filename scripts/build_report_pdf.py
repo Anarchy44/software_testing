@@ -23,11 +23,47 @@ from reportlab.platypus import (
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "deliverables"
-FIG = ROOT / "outputs" / "figures"
+FIG = ROOT / "outputs"
 SHOT = ROOT / "outputs" / "screenshots"
 
-registerFont(TTFont("CNBodyFont", r"C:\Windows\Fonts\msyh.ttc"))
-registerFont(TTFont("CNHeadingFont", r"C:\Windows\Fonts\simhei.ttf"))
+def _register_fonts():
+    """Register CN fonts, trying platform-specific paths."""
+    candidates = [
+        # Windows
+        (r"C:\Windows\Fonts\msyh.ttc", "CNBodyFont"),
+        (r"C:\Windows\Fonts\simhei.ttf", "CNHeadingFont"),
+        # macOS
+        ("/System/Library/Fonts/PingFang.ttc", "CNBodyFont"),
+        ("/System/Library/Fonts/PingFang.ttc", "CNHeadingFont"),
+        # Linux
+        ("/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc", "CNBodyFont"),
+        ("/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc", "CNHeadingFont"),
+    ]
+    registered = set()
+    for path, name in candidates:
+        if name in registered:
+            continue
+        if Path(path).exists():
+            registerFont(TTFont(name, path))
+            registered.add(name)
+    # Fallback: use built-in font for body at minimum
+    if "CNBodyFont" not in registered:
+        # Register a basic sans-serif font available on most systems
+        fallbacks = [
+            # Linux
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            # macOS
+            "/System/Library/Fonts/Helvetica.ttc",
+            # Windows
+            r"C:\Windows\Fonts\arial.ttf",
+        ]
+        for fb in fallbacks:
+            if Path(fb).exists():
+                registerFont(TTFont("CNBodyFont", fb))
+                registered.add("CNBodyFont")
+                break
+
+_register_fonts()
 
 
 def _load_optional_json(path: Path, default=None):
@@ -149,8 +185,8 @@ def bullet(text, s):
 
 
 def build_pdf() -> Path:
-    data = _load_optional_json(ROOT / "outputs" / "experiment_summary.json")
-    ablation = _load_optional_json(ROOT / "outputs" / "ablation_summary.json", [])
+    data = _load_optional_json(ROOT / "outputs" / "fluxev" / "experiment_summary.json")
+    ablation = _load_optional_json(ROOT / "outputs" / "ablation" / "ablation_summary.json", [])
 
     s = styles()
     story = []
@@ -287,11 +323,11 @@ def build_pdf() -> Path:
             )
         )
     story.append(Spacer(1, 0.2 * cm))
-    story.append(img(FIG / "fluxev_detection_result.png", 17.0 * cm))
+    story.append(img(FIG / "fluxev" / "figures" / "fluxev_detection_result.png", 17.0 * cm))
     story.append(Spacer(1, 0.2 * cm))
-    story.append(img(FIG / "fluxev_score_threshold.png", 17.0 * cm))
+    story.append(img(FIG / "fluxev" / "figures" / "fluxev_score_threshold.png", 17.0 * cm))
     story.append(Spacer(1, 0.2 * cm))
-    story.append(img(FIG / "fluxev_F_vs_S.png", 17.0 * cm))
+    story.append(img(FIG / "fluxev" / "figures" / "fluxev_F_vs_S.png", 17.0 * cm))
 
     # 4.1 消融实验
     story.append(Paragraph("4.1 消融实验 — 两步平滑贡献分析", s["CNH1"]))
@@ -321,7 +357,7 @@ def build_pdf() -> Path:
             s["CNBody"],
         ))
     story.append(Spacer(1, 0.15 * cm))
-    story.append(img(FIG / "ablation_comparison.png", 17.0 * cm))
+    story.append(img(FIG / "ablation" / "figures" / "ablation_comparison.png", 17.0 * cm))
 
     story.append(PageBreak())
 

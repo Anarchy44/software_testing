@@ -111,11 +111,16 @@ def _synthetic_fallback(duration_min: int) -> pd.DataFrame:
     noise = rng.normal(0, 4.5, n)
     latency = seasonal + noise
 
-    # Inject anomalies at 25% and 75% of the window
-    idx1 = n // 4
-    idx2 = 3 * n // 4
-    latency[idx1:idx1 + 3] += 80
-    latency[idx2:idx2 + 3] -= 60
+    # Inject anomalies to align with generate_labels() fault windows:
+    #   Window 1: 25%-35% of observation
+    #   Window 2: 65%-75% of observation
+    w1_start = n // 4
+    w1_end = int(n * 0.35)
+    w2_start = int(n * 0.65)
+    w2_end = int(n * 0.75)
+    spike_len = min(3, w1_end - w1_start, w2_end - w2_start)
+    latency[w1_start:w1_start + spike_len] += 80
+    latency[w2_start:w2_start + spike_len] -= 60
 
     return pd.DataFrame({
         "timestamp": pd.date_range("2026-06-10 08:00:00", periods=n, freq="min"),

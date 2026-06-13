@@ -89,7 +89,7 @@ def main() -> None:
     parser.add_argument("--period", type=int, default=60)
     args = parser.parse_args()
 
-    out_dir = ROOT / "outputs"
+    out_dir = ROOT / "outputs" / "ablation"
     fig_dir = out_dir / "figures"
     out_dir.mkdir(parents=True, exist_ok=True)
     fig_dir.mkdir(parents=True, exist_ok=True)

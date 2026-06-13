@@ -9,6 +9,12 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 DATA_PATH = Path(os.environ.get("DIAGNOSIS_DATA", "/app/data/metrics_with_scores.csv"))
+# If the default Docker path doesn't exist (e.g. local development), fall back
+# to a path relative to the project root.
+if not DATA_PATH.exists():
+    _local = Path(__file__).resolve().parents[2] / "data" / "metrics_with_scores.csv"
+    if _local.exists():
+        DATA_PATH = _local
 REQUEST_COUNT = 0
 START_TIME = time.time()
 

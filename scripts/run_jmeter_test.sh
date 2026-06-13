@@ -2,8 +2,12 @@
 # run_jmeter_test.sh - Run JMeter performance test on Online Boutique
 set -euo pipefail
 
-JMETER_TEST="tests/jmeter/online_boutique_test.jmx"
-OUTPUT_DIR="outputs/jmeter"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+cd "$PROJECT_ROOT" || exit 1
+
+JMETER_TEST="$PROJECT_ROOT/tests/jmeter/online_boutique_test.jmx"
+OUTPUT_DIR="$PROJECT_ROOT/outputs/jmeter"
 mkdir -p "$OUTPUT_DIR"
 
 # Check if JMeter is installed

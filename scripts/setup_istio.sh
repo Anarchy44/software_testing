@@ -5,8 +5,12 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+cd "$PROJECT_ROOT" || exit 1
+
 ISTIO_VERSION="1.22.0"
-ISTIO_DIR="istio-${ISTIO_VERSION}"
+ISTIO_DIR="$PROJECT_ROOT/istio-${ISTIO_VERSION}"
 
 # ── Platform detection ──
 OS="linux"
@@ -31,7 +35,7 @@ if ! command -v istioctl &>/dev/null; then
     fi
     rm -f "${ARCHIVE}"
   fi
-  export PATH="$PWD/${ISTIO_DIR}/bin:$PATH"
+  export PATH="${ISTIO_DIR}/bin:$PATH"
   echo "istioctl path: $(which istioctl)"
 fi
 

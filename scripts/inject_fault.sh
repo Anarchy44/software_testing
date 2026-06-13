@@ -4,6 +4,10 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+cd "$PROJECT_ROOT" || exit 1
+
 FAULT=${1:-}
 
 if [ -z "$FAULT" ]; then
@@ -17,7 +21,7 @@ if [ -z "$FAULT" ]; then
   exit 1
 fi
 
-FAULT_FILE="k8s/chaos-experiments/${FAULT}.yaml"
+FAULT_FILE="$PROJECT_ROOT/k8s/chaos-experiments/${FAULT}.yaml"
 
 if [ ! -f "$FAULT_FILE" ]; then
   echo "ERROR: Fault file not found: $FAULT_FILE"

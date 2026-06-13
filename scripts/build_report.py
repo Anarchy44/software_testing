@@ -15,7 +15,7 @@ from docx.shared import Inches, Pt, RGBColor
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "deliverables"
-FIG = ROOT / "outputs" / "figures"
+FIG = ROOT / "outputs"
 SHOT = ROOT / "outputs" / "screenshots"
 
 
@@ -92,8 +92,8 @@ def add_image(doc, path, width=6.3):
 
 
 def build_doc() -> Path:
-    summary = _load_optional_json(ROOT / "outputs" / "experiment_summary.json")
-    ablation = _load_optional_json(ROOT / "outputs" / "ablation_summary.json", [])
+    summary = _load_optional_json(ROOT / "outputs" / "fluxev" / "experiment_summary.json")
+    ablation = _load_optional_json(ROOT / "outputs" / "ablation" / "ablation_summary.json", [])
 
     doc = Document()
     sec = doc.sections[0]
@@ -175,9 +175,9 @@ def build_doc() -> Path:
             f"Recall = {summary.get('recall', 0):.3f}",
             f"F1 = {summary.get('f1', 0):.3f}",
         ])
-    add_image(doc, FIG / "fluxev_detection_result.png", 6.5)
-    add_image(doc, FIG / "fluxev_score_threshold.png", 6.5)
-    add_image(doc, FIG / "fluxev_F_vs_S.png", 6.5)
+    add_image(doc, FIG / "fluxev" / "figures" / "fluxev_detection_result.png", 6.5)
+    add_image(doc, FIG / "fluxev" / "figures" / "fluxev_score_threshold.png", 6.5)
+    add_image(doc, FIG / "fluxev" / "figures" / "fluxev_F_vs_S.png", 6.5)
 
     # 4.1 消融实验
     add_heading(doc, "4.1 消融实验 — 两步平滑贡献分析", 2)
@@ -199,7 +199,7 @@ def build_doc() -> Path:
         add_body(doc, f"完整两步平滑的 F1={best['f1']:.4f}，与论文 Table 4 的结论一致：两步平滑能有效抑制噪声波动，同时保留真实异常信号，整体检测性能优于仅使用单步平滑或不用平滑。")
     else:
         add_body(doc, "（运行 scripts/run_ablation.py 生成消融实验结果后，本表格将自动填充。实验对比了无平滑、仅第一步平滑、两步完整的三种变体在 Precision/Recall/F1 上的表现。）")
-    add_image(doc, FIG / "ablation_comparison.png", 6.5)
+    add_image(doc, FIG / "ablation" / "figures" / "ablation_comparison.png", 6.5)
 
     # ================================================================
     # 5. 测试 (Selenium + JMeter) — NEW

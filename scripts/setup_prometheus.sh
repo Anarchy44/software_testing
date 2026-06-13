@@ -2,16 +2,20 @@
 # setup_prometheus.sh - Deploy Prometheus to minikube monitoring namespace
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+cd "$PROJECT_ROOT" || exit 1
+
 echo "=== Setting up Prometheus ==="
 
 # Create monitoring namespace if not exists
 kubectl create namespace monitoring --dry-run=client -o yaml | kubectl apply -f -
 
 # Apply configmap with scrape config
-kubectl apply -f k8s/prometheus-config.yaml
+kubectl apply -f "$PROJECT_ROOT/k8s/prometheus-config.yaml"
 
 # Apply deployment + service + RBAC
-kubectl apply -f k8s/prometheus-deployment.yaml
+kubectl apply -f "$PROJECT_ROOT/k8s/prometheus-deployment.yaml"
 
 # Wait for pod ready
 echo "Waiting for Prometheus pod to be ready..."
