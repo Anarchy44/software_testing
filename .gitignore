@@ -1,0 +1,37 @@
+# ── Python ──
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# ── Vendored large dependencies ──
+istio-1.22.0/
+third_party/
+
+# ── JMeter output (potentially very large CSV/JTL) ──
+outputs/jmeter/jmeter_results.csv
+outputs/jmeter/jmeter_results.jtl
+outputs/jmeter/report/
+
+# ── Temp / misc files ──
+misc/
+nul
+*.log
+_docx_out.txt
+
+# ── OS files ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ──
+.vscode/
+.idea/
+
+# ── Output data that should not be committed ──
+# (keep sample data and screenshots, but exclude regenerable CSVs)
+outputs/fluxev/metrics_with_scores.csv
+
+# ── Node (if any) ──
+node_modules/

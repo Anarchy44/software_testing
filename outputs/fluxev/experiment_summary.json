@@ -1,0 +1,22 @@
+{
+  "input": "data\\sample_prometheus_metrics.csv",
+  "points": 720,
+  "true_anomalies": 8,
+  "predicted_anomalies": 13,
+  "threshold": 3.5482167024270304,
+  "precision": 0.6153846153846154,
+  "recall": 1.0,
+  "f1": 0.761904761904762,
+  "adjusted_recall": 1.0,
+  "true_windows": 4,
+  "params": {
+    "s": 5,
+    "alpha": 0.4,
+    "d": 1,
+    "p": 2,
+    "l": 60,
+    "k": 150,
+    "risk": 0.01,
+    "base_quantile": 0.98
+  }
+}

@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: online-boutique
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: diagnosis-sample-data
+  namespace: online-boutique
+data:
+  metrics_with_scores.csv: |
+    timestamp,service,metric,value,is_anomaly,fluxev_score,threshold,predicted_anomaly
+    2026-06-10 08:00:00,frontend,request_latency_ms_p95,180,0,1.0,2.5,0
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: diagnosis-service
+  namespace: online-boutique
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: diagnosis-service
+  template:
+    metadata:
+      labels:
+        app: diagnosis-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+        - name: diagnosis-service
+          image: diagnosis-service:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DIAGNOSIS_DATA
+              value: /app/data/metrics_with_scores.csv
+          volumeMounts:
+            - name: diagnosis-data
+              mountPath: /app/data
+      volumes:
+        - name: diagnosis-data
+          configMap:
+            name: diagnosis-sample-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: diagnosis-service
+  namespace: online-boutique
+spec:
+  selector:
+    app: diagnosis-service
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
