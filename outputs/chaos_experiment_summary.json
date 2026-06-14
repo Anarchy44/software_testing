@@ -1,0 +1,16 @@
+{
+  "source": "data\\chaos_real_metrics.csv",
+  "points": 45,
+  "true_points": 40,
+  "predicted_points": 0,
+  "threshold": 0.0,
+  "point_precision": 0.0,
+  "point_recall": 0.0,
+  "point_f1": 0.0,
+  "window_true": 1,
+  "window_caught": 0,
+  "window_predicted": 0,
+  "window_precision": 0.0,
+  "window_recall": 0.0,
+  "window_f1": 0.0
+}

@@ -109,10 +109,11 @@ class DonutTrainer:
             recon_losses.append(metrics["recon_loss"])
             kl_losses.append(metrics["kl_loss"])
 
+        n = len(total_losses) or 1
         return {
-            "train_loss": sum(total_losses) / len(total_losses),
-            "recon_loss": sum(recon_losses) / len(recon_losses),
-            "kl_loss": sum(kl_losses) / len(kl_losses),
+            "train_loss": sum(total_losses) / n,
+            "recon_loss": sum(recon_losses) / n,
+            "kl_loss": sum(kl_losses) / n,
         }
 
     def validate(self, dataloader: DataLoader) -> dict[str, float]:
@@ -182,8 +183,11 @@ class DonutTrainer:
         """
         # Create data loaders
         train_dataset = TensorDataset(X_train)
+        # Only drop_last when we have enough samples; otherwise we get 0 batches
+        drop = len(X_train) > batch_size
         train_loader = DataLoader(
-            train_dataset, batch_size=batch_size, shuffle=True, drop_last=True
+            train_dataset, batch_size=min(batch_size, len(X_train)),
+            shuffle=True, drop_last=drop,
         )
 
         if X_val is not None:

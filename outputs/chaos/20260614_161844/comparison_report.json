@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-06-14T08:18:49.042479+00:00",
+  "fluxev": {
+    "source": "C:\\Users\\24470\\Desktop\\软件测试与维护\\lab\\software_testing_final_submission_sanitized\\outputs\\chaos\\20260614_161844\\chaos_metrics.csv",
+    "points": 5,
+    "true_points": 0,
+    "predicted_points": 0,
+    "threshold": 12.236220683137386,
+    "point_precision": 0.0,
+    "point_recall": 0.0,
+    "point_f1": 0.0,
+    "window_true": 0,
+    "window_caught": 0,
+    "window_predicted": 0,
+    "window_precision": 0.0,
+    "window_recall": 1.0,
+    "window_f1": 0.0
+  },
+  "donut": {
+    "algorithm": "Donut",
+    "error": "Traceback (most recent call last):\n  File \"C:\\Users\\24470\\Desktop\\软件测试与维护\\lab\\software_testing_final_submission_sanitized\\scripts\\run_donut_on_chaos.py\", line 417, in <module>\n    main()\n  File \"C:\\Us"
+  }
+}

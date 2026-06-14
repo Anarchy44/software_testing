@@ -1,0 +1,6 @@
+timestamp,service,metric,value
+2026-06-10 08:00:00,frontend,request_latency_ms_p95,181.95879169217127
+2026-06-10 08:01:00,frontend,request_latency_ms_p95,191.18242812291749
+2026-06-10 08:02:00,frontend,request_latency_ms_p95,194.4797017208039
+2026-06-10 08:03:00,frontend,request_latency_ms_p95,202.93304899435807
+2026-06-10 08:04:00,frontend,request_latency_ms_p95,207.30886106813276

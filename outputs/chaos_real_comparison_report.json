@@ -1,0 +1,25 @@
+{
+  "experiment": "ChaosMesh network-delay 200ms (10min)",
+  "fault_window": "2026-06-14 08:32:00 - 08:42:00 UTC",
+  "data_points": 45,
+  "anomaly_points": 40,
+  "mean_latency_during_fault": 191.24844252327958,
+  "mean_latency_normal": 206.8685479983912,
+  "fluxev": {
+    "point_precision": 1.0,
+    "point_recall": 0.275,
+    "point_f1": 0.431,
+    "predicted": 11,
+    "note": "SPOT failed on small dataset, used 75th percentile"
+  },
+  "donut": {
+    "point_precision": 1.0,
+    "point_recall": 0.425,
+    "point_f1": 0.597,
+    "window_precision": 1.0,
+    "window_recall": 1.0,
+    "window_f1": 1.0,
+    "predicted": 17,
+    "window_size": 30
+  }
+}
