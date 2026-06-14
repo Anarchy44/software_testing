@@ -78,7 +78,9 @@ class DonutTrainer:
         recon_losses = []
         kl_losses = []
 
-        for batch_x in tqdm(dataloader, desc="Training", leave=False):
+        for batch in tqdm(dataloader, desc="Training", leave=False):
+            # DataLoader returns list of tensors from TensorDataset
+            batch_x = batch[0] if isinstance(batch, (list, tuple)) else batch
             batch_x = batch_x.to(self.device)
 
             # Inject missing data
@@ -97,9 +99,10 @@ class DonutTrainer:
                 beta=self.beta,
             )
 
-            # Backward pass
+            # Backward pass with gradient clipping
             self.optimizer.zero_grad()
             loss.backward()
+            torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
             self.optimizer.step()
 
             total_losses.append(metrics["total_loss"])
@@ -127,7 +130,9 @@ class DonutTrainer:
         kl_losses = []
 
         with torch.no_grad():
-            for batch_x in dataloader:
+            for batch in dataloader:
+                # DataLoader returns list of tensors from TensorDataset
+                batch_x = batch[0] if isinstance(batch, (list, tuple)) else batch
                 batch_x = batch_x.to(self.device)
 
                 # Forward pass (no missing injection during validation)

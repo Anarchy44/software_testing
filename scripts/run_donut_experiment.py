@@ -65,8 +65,9 @@ def load_and_preprocess_data(input_path: Path, window_size: int = 120):
         if "is_anomaly" in df.columns:
             label = df["is_anomaly"].iloc[i : i + window_size].max()
         else:
-            # Heuristic: mark windows with extreme values as anomalous
-            label = 1 if (window.max() > 0.95 or window.min() < 0.05) else 0
+            # Heuristic: mark windows with extreme z-scores as anomalous (>3 std)
+            z_scores = np.abs((window - window.mean()) / (window.std() + 1e-8))
+            label = 1 if z_scores.max() > 3.0 else 0
         labels.append(label)
 
     windows = np.array(windows, dtype=np.float32)

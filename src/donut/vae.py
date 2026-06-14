@@ -86,6 +86,8 @@ class DonutVAE(nn.Module):
         h = self.encoder(x)
         mu = self.fc_mu(h)
         logvar = self.fc_logvar(h)
+        # Clamp logvar for numerical stability
+        logvar = torch.clamp(logvar, min=-10, max=10)
         return mu, logvar
 
     def reparameterize(

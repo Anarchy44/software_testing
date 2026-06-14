@@ -53,8 +53,10 @@ def melbo_loss(
         # Standard MSE reconstruction loss
         recon_loss = F.mse_loss(x_recon, x, reduction="mean")
 
-    # KL divergence: -0.5 * sum(1 + log(sigma^2) - mu^2 - sigma^2)
-    kl_loss = -0.5 * torch.mean(torch.sum(1 + logvar - mu.pow(2) - logvar.exp(), dim=1))
+    # KL divergence with numerical stability: -0.5 * sum(1 + log(sigma^2) - mu^2 - sigma^2)
+    # Clamp logvar to prevent overflow
+    logvar_clamped = torch.clamp(logvar, min=-10, max=10)
+    kl_loss = -0.5 * torch.mean(torch.sum(1 + logvar_clamped - mu.pow(2) - logvar_clamped.exp(), dim=1))
 
     # Total loss
     total_loss = recon_loss + beta * kl_loss
@@ -97,8 +99,13 @@ class MissingDataInjector:
             Tuple of (x_with_missing, mask)
             where mask indicates which points are valid (1) vs missing (0)
         """
-        # Generate random mask
-        mask = torch.rand_like(x, generator=self.rng) > self.missing_rate
+        # Generate random mask (PyTorch 1.x compatible)
+        try:
+            mask = torch.rand_like(x, generator=self.rng) > self.missing_rate
+        except TypeError:
+            # Fallback for older PyTorch versions
+            mask = torch.rand_like(x) > self.missing_rate
+        
         mask = mask.float()
 
         # Set missing points to 0
