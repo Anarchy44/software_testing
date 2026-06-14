@@ -1,0 +1,15 @@
+{
+  "algorithm": "Donut",
+  "window_size": 60,
+  "epochs": 100,
+  "training_samples": 752,
+  "test_samples": 189,
+  "precision": 0.7989417988995269,
+  "recall": 0.9999999999337748,
+  "f1": 0.8882352891278547,
+  "true_positives": 151,
+  "false_positives": 38,
+  "true_negatives": 0,
+  "false_negatives": 0,
+  "threshold": 0.464821034669876
+}

@@ -1,0 +1,22 @@
+{
+  "donut": {
+    "algorithm": "Donut",
+    "precision": 0.7989417988995269,
+    "recall": 0.9999999999337748,
+    "f1": 0.8882352891278547,
+    "train_time": 4.732621192932129,
+    "detect_time": 0.0750272274017334,
+    "total_time": 5.929949998855591,
+    "model_params": 569570
+  },
+  "fluxev": {
+    "algorithm": "FluxEV",
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0,
+    "train_time": 0.0,
+    "detect_time": 0.005018949508666992,
+    "total_time": 0.005018949508666992,
+    "model_params": 0
+  }
+}

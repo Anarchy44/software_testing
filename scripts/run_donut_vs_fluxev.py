@@ -164,13 +164,19 @@ def run_fluxev(X_test, y_test):
     start_time = time.time()
 
     # FluxEV doesn't need training, just detection
-    detector = FluxEVDetector(window_size=60, l=30, d=2, p=5)
+    import pandas as pd
+    detector = FluxEVDetector(s=10, alpha=0.3, d=2, p=5, l=60)
 
     detect_start = time.time()
-    # Note: FluxEV works on raw time series, not windows
-    # This is a simplified comparison
-    scores = np.random.randn(len(y_test))  # Placeholder
-    predictions = (scores > np.percentile(scores, 95)).astype(int)
+    # FluxEV works on raw time series - reconstruct from test windows
+    raw_values = X_test[:, 0]  # First point of each window as proxy
+    raw_series = pd.Series(raw_values)
+
+    # Run FluxEV detection
+    result = detector.detect(raw_series)
+    predictions = result.labels[-len(y_test):]
+    scores = result.score[-len(y_test):]
+
     detect_time = time.time() - detect_start
 
     total_time = time.time() - start_time
