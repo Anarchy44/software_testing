@@ -32,6 +32,7 @@ desktop.ini
 # ── Output data that should not be committed ──
 # (keep sample data and screenshots, but exclude regenerable CSVs)
 outputs/fluxev/metrics_with_scores.csv
+outputs/donut/*.csv
 
 # ── Node (if any) ──
 node_modules/
